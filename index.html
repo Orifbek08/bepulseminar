@@ -1,414 +1,491 @@
-<!doctype html>
-<html lang="uz">
+<!DOCTYPE html>
+<html lang="uz-Cyrl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Билет яратиш · Бухоро</title>
+<title>Билет яратиш — Бухоро семинари</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Unbounded:wght@500;700&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap&subset=cyrillic,cyrillic-ext" rel="stylesheet">
+
+<!-- ═══════════ СОЗЛАМАЛАР — фақат шу ерни ўзгартиринг ═══════════ -->
+<script>
+const CONFIG = {
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzq27ly408WCqcGoqihqlEqGJoI4xJXTEGKi0RFqy7jMYhoVKOtU1Q9D3zx1ZBAlqsz/exec",
+  IMAGES: {
+    HERO_DESKTOP: "hero-desktop.jpg",
+    HERO_MOBILE:  "hero-mobile.jpg",
+    SPEAKER:      "speaker.jpg"      // билет фонидаги расм
+  },
+  REGION:  "Бухоро",
+  TITLE:   "Бепул семинар",
+  SPEAKER: "Илҳом Бегимқулов",
+  DATE:    "2 НОЯБР 2026",
+  TIME:    "10:00",
+  PLACE:   "БУХОРО"
+};
+</script>
+
 <style>
-  :root {
-    --lapis: #1D3F7A;
-    --lapis-deep: #142C57;
-    --turq: #3FA9A3;
-    --brick: #C9A06B;
-    --ink: #1A2238;
-    --paper: #F5F7FA;
-    --line: #D6DCE6;
-    --muted: #5B6478;
-    --ok: #2F7D5B;
-    --warn: #9A5B12;
-    --err: #A63A3A;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font: 400 16px/1.5 "Golos Text", system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  .wrap {
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 32px 16px 48px;
-    display: grid;
-    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
-    gap: 48px;
-    align-items: start;
-  }
-  header.top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
-  header.top h1 { font: 700 26px/1.15 "Unbounded", system-ui, sans-serif; margin: 0; letter-spacing: -0.01em; }
-  header.top p { margin: 0; color: var(--muted); }
-  .counter { color: var(--muted); font-size: 15px; }
-  .counter b { color: var(--ink); font-weight: 600; }
+:root{
+  --bg:#050505; --bg-2:#0C0B09; --card:#100E0B;
+  --gold:#C9A227; --gold-2:#E7C87A;
+  --line:rgba(231,200,122,.16);
+  --text:#F3EFE7; --muted:#9C958A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
-  form { display: grid; gap: 20px; }
-  label { display: block; font-weight: 500; margin-bottom: 6px; }
-  .field input {
-    width: 100%;
-    font: 500 20px/1.2 "Golos Text", system-ui, sans-serif;
-    color: var(--ink);
-    background: #fff;
-    border: 1.5px solid var(--line);
-    border-radius: 10px;
-    padding: 14px 14px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  .field input:focus { border-color: var(--lapis); box-shadow: 0 0 0 3px rgba(29,63,122,.15); }
-  .phone { display: flex; align-items: stretch; }
-  .phone span {
-    display: grid; place-items: center;
-    padding: 0 12px;
-    font: 500 20px/1 "Golos Text", system-ui, sans-serif;
-    background: #E9EDF4; border: 1.5px solid var(--line); border-right: 0;
-    border-radius: 10px 0 0 10px; color: var(--muted);
-  }
-  .phone input { border-radius: 0 10px 10px 0; }
-  .hint { color: var(--muted); font-size: 14px; margin-top: 6px; }
+/* HEADER */
+header{position:sticky;top:0;z-index:60;background:rgba(5,5,5,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;height:72px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:.04em}
+.logo span{color:var(--gold)}
+.count{font-size:14px;color:var(--muted)}
+.count b{color:var(--gold-2);font-weight:600}
 
-  button {
-    font: 600 17px/1 "Golos Text", system-ui, sans-serif;
-    border-radius: 10px;
-    padding: 16px 20px;
-    cursor: pointer;
-    border: 1.5px solid transparent;
-  }
-  button:focus-visible { outline: 3px solid var(--turq); outline-offset: 2px; }
-  button[disabled] { opacity: .55; cursor: progress; }
-  .primary { background: var(--lapis); color: #fff; width: 100%; }
-  .primary:hover:not([disabled]) { background: var(--lapis-deep); }
-  .ghost { background: #fff; color: var(--ink); border-color: var(--line); }
-  .ghost:hover { border-color: var(--lapis); }
+/* BANNER */
+.banner{position:relative;height:300px;overflow:hidden;border-bottom:1px solid var(--line)}
+.banner img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,5,.1) 0%,rgba(5,5,5,.5) 45%,rgba(5,5,5,.92) 75%)}
+.banner .wrap{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:flex-end}
+.banner-inner{max-width:440px}
+.banner h1{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,50px);font-weight:600;line-height:1.08}
+.banner h1 em{font-style:normal;color:var(--gold-2)}
+.banner p{margin-top:10px;color:#C9C2B6;font-weight:300}
 
-  .status { min-height: 24px; font-weight: 500; }
-  .status.ok { color: var(--ok); }
-  .status.warn { color: var(--warn); }
-  .status.err { color: var(--err); }
+/* MAIN */
+main{padding:56px 0 72px}
+.grid{display:grid;grid-template-columns:420px 1fr;gap:56px;align-items:start}
 
-  .actions { display: none; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .actions.show { display: grid; }
-  .actions .wide { grid-column: 1 / -1; }
+.form{border:1px solid var(--line);background:var(--card);padding:36px}
+.form h2{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;line-height:1.15}
+.rule{width:64px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:16px 0 26px}
+.field{margin-bottom:24px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.field input{width:100%;padding:13px 0;background:transparent;border:0;border-bottom:1px solid var(--line);color:#fff;font:400 18px 'Manrope',sans-serif}
+.field input:focus{outline:0;border-bottom-color:var(--gold)}
+.field input::placeholder{color:#5D574E}
+.hint{font-size:12.5px;color:var(--muted);margin-top:8px}
 
-  .preview { position: sticky; top: 24px; }
-  .preview canvas {
-    width: 100%; max-width: 480px; height: auto; display: block; margin: 0 auto;
-    border-radius: 14px;
-    box-shadow: 0 24px 48px -24px rgba(20,44,87,.55);
-  }
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 24px;border:0;border-radius:2px;cursor:pointer;
+  font:600 15px 'Manrope',sans-serif;letter-spacing:.02em;transition:.2s}
+.btn:focus-visible{outline:2px solid var(--gold-2);outline-offset:3px}
+.btn-gold{background:linear-gradient(180deg,#D9B245,#B78F1E);color:#12100A}
+.btn-gold:hover:not(:disabled){filter:brightness(1.1)}
+.btn-line{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn-line:hover{border-color:var(--gold);color:var(--gold-2)}
+.btn:disabled{opacity:.55;cursor:progress}
 
-  .log { margin-top: 8px; }
-  .log h2 { font: 600 16px/1.3 "Golos Text", system-ui, sans-serif; margin: 0 0 8px; }
-  .log ol { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
-  .log li { border-bottom: 1px solid var(--line); }
-  .log button {
-    width: 100%; background: none; border: 0; border-radius: 0; padding: 10px 2px;
-    display: flex; justify-content: space-between; gap: 12px; text-align: left;
-    font: 400 15px/1.3 "Golos Text", system-ui, sans-serif; color: var(--ink);
-  }
-  .log button:hover { background: #EDF1F7; }
-  .log .id { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .log .empty { color: var(--muted); font-size: 15px; padding: 10px 0; }
+.msg{margin-top:16px;padding:12px 14px;font-size:14px;display:none;border-left:2px solid}
+.msg.show{display:block}
+.msg.err{background:rgba(200,60,60,.08);border-color:#C24141;color:#F0B8B8}
+.msg.ok{background:rgba(201,162,39,.08);border-color:var(--gold);color:var(--gold-2)}
+.msg.warn{background:rgba(231,200,122,.06);border-color:#E7C87A;color:#E9DDB8}
 
-  @media (max-width: 820px) {
-    .wrap { grid-template-columns: 1fr; gap: 28px; padding-top: 20px; }
-    .preview { position: static; order: -1; }
-    header.top { order: -2; }
-    .preview canvas { max-width: 360px; }
-  }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.actions{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.actions.show{display:grid}
+.actions .wide{grid-column:1/-1}
+
+.recent{margin-top:28px}
+.recent h3{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:8px}
+.recent ol{list-style:none;border-top:1px solid var(--line)}
+.recent li{border-bottom:1px solid var(--line)}
+.recent button{width:100%;display:flex;justify-content:space-between;gap:12px;padding:11px 2px;background:none;border:0;cursor:pointer;
+  color:var(--text);font:400 15px 'Manrope',sans-serif;text-align:left}
+.recent button:hover{color:var(--gold-2)}
+.recent .id{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.recent .empty{color:var(--muted);font-size:14px;padding:11px 0}
+
+.preview{position:sticky;top:96px}
+.preview-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}
+.preview-head span{font-size:14px;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--line)}
+.seg button{background:none;border:0;color:var(--muted);padding:8px 16px;cursor:pointer;font:500 14px 'Manrope',sans-serif}
+.seg button[aria-pressed="true"]{background:rgba(201,162,39,.14);color:var(--gold-2)}
+.seg button:focus-visible{outline:2px solid var(--gold-2);outline-offset:-2px}
+#ticket{width:100%;height:auto;display:block;border:1px solid var(--line);margin:0 auto}
+#ticket.portrait{max-width:440px}
+
+footer{border-top:1px solid rgba(255,255,255,.06);padding:32px 0;color:var(--muted);font-size:13px}
+
+@media(max-width:960px){
+  .grid{grid-template-columns:1fr;gap:36px}
+  .preview{position:static;order:-1}
+}
+@media(max-width:640px){
+  .wrap{padding:0 18px}
+  .nav{height:62px}
+  .logo{font-size:19px;white-space:nowrap}
+  .count .lbl{display:none}
+  .banner{height:auto}
+  .banner img{aspect-ratio:1/1.1;height:auto;max-height:62vh;object-position:center 25%}
+  .banner::after{background:linear-gradient(180deg,transparent 45%,var(--bg))}
+  .banner .wrap{top:auto;align-items:flex-end;justify-content:flex-start;padding-bottom:8px}
+  main{padding:28px 0 56px}
+  .form{padding:24px 20px}
+  .field input{font-size:17px}
+  #ticket.portrait{max-width:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<main class="wrap">
-  <header class="top">
-    <div>
-      <h1>Бухоро семинари</h1>
-      <p>2 ноябрь, 2026 · билет яратиш</p>
-    </div>
-    <div class="counter">Бу қурилмада яратилди: <b id="count">0</b></div>
-  </header>
 
-  <section>
-    <form id="form" novalidate>
-      <div class="field">
-        <label for="name">Исм ва фамилия</label>
-        <input id="name" name="name" autocomplete="off" autocapitalize="words" placeholder="Масалан, Азиз Каримов" required>
-      </div>
-      <div class="field">
-        <label for="phone">Телефон рақам</label>
-        <div class="phone">
-          <span>+998</span>
-          <input id="phone" name="phone" inputmode="numeric" autocomplete="off" placeholder="90 123 45 67" required>
+<header>
+  <div class="wrap nav">
+    <div class="logo">Илҳом <span>Бегимқулов</span></div>
+    <div class="count"><span class="lbl">Бу қурилмада: </span><b id="count">0</b> та билет</div>
+  </div>
+</header>
+
+<section class="banner" id="banner">
+  <div class="wrap">
+    <div class="banner-inner">
+      <h1>Бепул семинар<br><em>Бухоро, 2 ноябр</em></h1>
+      <p>Иштирокчига билет яратиш ва жадвалга ёзиш.</p>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap grid">
+    <section>
+      <form class="form" id="form" novalidate>
+        <h2>Янги билет</h2>
+        <div class="rule"></div>
+        <div class="field">
+          <label for="fname">Исм ва фамилия</label>
+          <input id="fname" type="text" placeholder="Азиз Каримов" autocomplete="off" autocapitalize="words" required>
+          <div class="hint">Билетда шу ном чиқади — фамилиясини ҳам ёзинг.</div>
         </div>
-        <div class="hint">Битта рақамга битта билет. Рақам аввал ёзилган бўлса, ўша билет қайта очилади.</div>
+        <div class="field">
+          <label for="fphone">Телефон рақам</label>
+          <input id="fphone" type="tel" inputmode="tel" placeholder="+998 90 123 45 67" autocomplete="off" required>
+          <div class="hint">Битта рақамга битта билет. Рақам аввал ёзилган бўлса, ўша билет очилади.</div>
+        </div>
+        <button class="btn btn-gold" id="submitBtn" type="submit">Билет яратиш</button>
+        <div class="msg" id="msg" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="actions" id="actions">
+        <button class="btn btn-line" id="dlBtn" type="button">Юклаб олиш</button>
+        <button class="btn btn-line" id="shareBtn" type="button">Улашиш</button>
+        <button class="btn btn-gold wide" id="nextBtn" type="button">Кейинги иштирокчи</button>
       </div>
-      <button class="primary" id="submit" type="submit">Билет яратиш</button>
-      <div class="status" id="status" role="status" aria-live="polite"></div>
-    </form>
 
-    <div class="actions" id="actions">
-      <button class="ghost" id="download" type="button">Юклаб олиш</button>
-      <button class="ghost" id="share" type="button">Улашиш</button>
-      <button class="primary wide" id="next" type="button">Кейинги иштирокчи</button>
-    </div>
+      <div class="recent">
+        <h3>Охирги билетлар</h3>
+        <ol id="recent"></ol>
+      </div>
+    </section>
 
-    <div class="log">
-      <h2>Охирги билетлар</h2>
-      <ol id="log"></ol>
-    </div>
-  </section>
-
-  <section class="preview" aria-label="Билет кўриниши">
-    <canvas id="ticket" width="1080" height="1350"></canvas>
-  </section>
+    <section class="preview" aria-label="Билет кўриниши">
+      <div class="preview-head">
+        <span>Билет кўриниши</span>
+        <div class="seg" role="group" aria-label="Билет шакли">
+          <button type="button" data-f="portrait" aria-pressed="true">Тик</button>
+          <button type="button" data-f="landscape" aria-pressed="false">Ётиқ</button>
+        </div>
+      </div>
+      <canvas id="ticket" class="portrait" width="900" height="1100"></canvas>
+    </section>
+  </div>
 </main>
 
+<footer>
+  <div class="wrap">© 2026 Илҳом Бегимқулов · Real Business Academy</div>
+</footer>
+
 <script>
-/* ============ СОЗЛАМАЛАР — фақат шу ерни ўзгартиринг ============ */
-const CONFIG = {
-  // Google Apps Script → Deploy → Web app манзили (…/exec)
-  SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzq27ly408WCqcGoqihqlEqGJoI4xJXTEGKi0RFqy7jMYhoVKOtU1Q9D3zx1ZBAlqsz/exec',
-  REGION: 'Бухоро',
-  TITLE: 'Бепул семинар',
-  SPEAKER: 'Илҳом Бегимқулов',
-  DATE: '2 ноябрь, 2026',
-  TIME: '10:00',
-  PLACE: 'Бухоро шаҳри',
-  BRAND: 'Real Business Academy'
-};
-/* ================================================================ */
-
-const $ = (id) => document.getElementById(id);
-const form = $('form'), nameEl = $('name'), phoneEl = $('phone');
-const statusEl = $('status'), actions = $('actions'), submitBtn = $('submit');
+const $ = id => document.getElementById(id);
+const form = $('form'), nameIn = $('fname'), phoneIn = $('fphone');
+const msg = $('msg'), submitBtn = $('submitBtn'), actions = $('actions');
 const canvas = $('ticket'), ctx = canvas.getContext('2d');
-let current = null; // {ticketId, name, phone}
+let current = null;                 // {ticketId, name, phone}
+let format = 'portrait';
+try { format = localStorage.getItem('bx-format') || 'portrait'; } catch(e){}
 
-/* ---------- телефон ---------- */
-function digits(v) {
-  let d = String(v || '').replace(/\D/g, '');
-  if (d.startsWith('998') && d.length > 9) d = d.slice(3);
-  return d.slice(0, 9);
-}
-function fmtLocal(d) { // 901234567 → 90 123 45 67
-  return [d.slice(0,2), d.slice(2,5), d.slice(5,7), d.slice(7,9)].filter(Boolean).join(' ');
-}
-function masked(full) { // +998901234567 → +998 90 *** ** 67
-  const d = digits(full);
-  return d.length === 9 ? `+998 ${d.slice(0,2)} *** ** ${d.slice(7)}` : '+998 ·· ··· ·· ··';
-}
-phoneEl.addEventListener('input', () => {
-  phoneEl.value = fmtLocal(digits(phoneEl.value));
-  if (!current) draw();
-});
-nameEl.addEventListener('input', () => { if (!current) draw(); });
+/* ── Баннер расми ── */
+(function(){
+  const box = $('banner'), img = new Image();
+  img.alt = ''; img.decoding = 'async';
+  img.onerror = () => img.remove();
+  img.src = matchMedia('(max-width:640px)').matches ? CONFIG.IMAGES.HERO_MOBILE : CONFIG.IMAGES.HERO_DESKTOP;
+  box.prepend(img);
+})();
 
-/* ---------- билет чизиш ---------- */
-const W = 1080, H = 1350;
-function star(x, y, r) {
-  ctx.beginPath(); ctx.rect(x - r, y - r, 2*r, 2*r);
-  ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI/4);
-  ctx.rect(-r, -r, 2*r, 2*r); ctx.restore();
-  ctx.stroke();
+/* ── Телефон ── */
+function digits(raw){
+  let d = String(raw||'').replace(/\D/g,'');
+  if (d.startsWith('998')) d = d.slice(3);
+  return d.slice(0,9);
 }
-function pattern(y0, h) {
-  ctx.save();
-  ctx.beginPath(); ctx.rect(0, y0, W, h); ctx.clip();
-  ctx.strokeStyle = 'rgba(63,169,163,.55)'; ctx.lineWidth = 2;
-  const s = 90;
-  for (let row = -1; row * s < h + s; row++) {
-    for (let col = -1; col * s < W + s; col++) {
-      const off = row % 2 ? s/2 : 0;
-      star(col*s + off, y0 + row*s + s/2, 26);
-    }
+function normPhone(raw){ const d = digits(raw); return d.length===9 ? '+998'+d : null; }
+function prettyPhone(d){
+  let o = '+998';
+  if (d.length) o += ' '+d.slice(0,2);
+  if (d.length>2) o += ' '+d.slice(2,5);
+  if (d.length>5) o += ' '+d.slice(5,7);
+  if (d.length>7) o += ' '+d.slice(7,9);
+  return o;
+}
+phoneIn.addEventListener('input', e => { e.target.value = prettyPhone(digits(e.target.value)); if(!current) draw(); });
+phoneIn.addEventListener('focus', e => { if(!e.target.value) e.target.value = '+998 '; });
+nameIn.addEventListener('input', () => { if(!current) draw(); });
+
+/* ── Билет фонидаги расм ── */
+let tkPhoto = null;
+(function(){
+  const list = [CONFIG.IMAGES.SPEAKER, CONFIG.IMAGES.HERO_MOBILE, CONFIG.IMAGES.HERO_DESKTOP].filter(Boolean);
+  let k = 0; const i = new Image();
+  i.onload  = () => { tkPhoto = i; draw(); };
+  i.onerror = () => { k++; if (k < list.length) i.src = list[k]; };
+  i.src = list[0];
+})();
+
+/* ── Чизиш ёрдамчилари ── */
+const SANS = 'Manrope, system-ui, sans-serif', SERIF = '"Cormorant Garamond", Georgia, serif';
+function lab(x,y,t,s){ ctx.fillStyle='#8B8477'; ctx.font='600 '+(s||16)+'px '+SANS; ctx.fillText(t,x,y); }
+function val(x,y,t,size,maxW){
+  let s = size; const txt = String(t||'');
+  do { ctx.font='700 '+s+'px '+SANS; if (ctx.measureText(txt).width <= maxW) break; s -= 2; } while (s > 14);
+  ctx.fillStyle='#F5F1E8'; ctx.fillText(txt,x,y);
+}
+function nameLines(t,maxW,size){
+  const s = String(t||'').trim();
+  ctx.font='700 '+size+'px '+SANS;
+  if (ctx.measureText(s).width <= maxW) return {lines:[s], size};
+  const w = s.split(/\s+/);
+  for (let i=w.length-1;i>0;i--){
+    const a=w.slice(0,i).join(' '), b=w.slice(i).join(' ');
+    if (ctx.measureText(a).width<=maxW && ctx.measureText(b).width<=maxW) return {lines:[a,b], size};
   }
+  let sz = size;
+  while (sz > 16){ sz -= 2; ctx.font='700 '+sz+'px '+SANS; if (ctx.measureText(s).width<=maxW) break; }
+  return {lines:[s], size:sz};
+}
+function drawCover(img,x,y,w,h,alignY){
+  ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  const r = Math.max(w/img.width, h/img.height), nw = img.width*r, nh = img.height*r;
+  const oy = alignY==='top' ? 0 : (h-nh)/2;
+  ctx.drawImage(img, x+(w-nw)/2, y+oy, nw, nh);
   ctx.restore();
 }
-function fitText(text, maxW, start, min, weight, family) {
-  let size = start;
-  do { ctx.font = `${weight} ${size}px ${family}`; size -= 2; }
-  while (ctx.measureText(text).width > maxW && size > min);
-  return size + 2;
-}
-function wrapName(text, maxW) {
-  const words = text.split(/\s+/).filter(Boolean);
-  if (words.length < 2) return [text];
-  // энг тенг иккига бўлиш
-  let best = [text], bestW = Infinity;
-  for (let i = 1; i < words.length; i++) {
-    const a = words.slice(0,i).join(' '), b = words.slice(i).join(' ');
-    const w = Math.max(ctx.measureText(a).width, ctx.measureText(b).width);
-    if (w < bestW) { bestW = w; best = [a, b]; }
+function bg(W,H,portrait){
+  ctx.fillStyle='#0A0908'; ctx.fillRect(0,0,W,H);
+  if (tkPhoto){
+    if (portrait){
+      const top = Math.round(H*.52);
+      drawCover(tkPhoto, 0, 0, W, top, 'top');
+      const g1 = ctx.createLinearGradient(0,0,0,top);
+      g1.addColorStop(0,'rgba(10,9,8,.30)'); g1.addColorStop(.45,'rgba(10,9,8,.55)');
+      g1.addColorStop(.80,'rgba(10,9,8,.88)'); g1.addColorStop(1,'#0A0908');
+      ctx.fillStyle=g1; ctx.fillRect(0,0,W,top);
+    } else {
+      drawCover(tkPhoto, Math.round(W*.40), 0, Math.round(W*.60), H, 'top');
+      const g1 = ctx.createLinearGradient(0,0,W,0);
+      g1.addColorStop(0,'#0A0908'); g1.addColorStop(.40,'rgba(10,9,8,.94)'); g1.addColorStop(.54,'rgba(10,9,8,.40)');
+      g1.addColorStop(.62,'rgba(10,9,8,.20)'); g1.addColorStop(.80,'rgba(10,9,8,.10)'); g1.addColorStop(1,'rgba(10,9,8,.16)');
+      ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
+    }
   }
-  return ctx.measureText(text).width > maxW ? best : [text];
+  const g = ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'rgba(201,162,39,.16)'); g.addColorStop(.5,'rgba(201,162,39,.02)'); g.addColorStop(1,'rgba(201,162,39,.10)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(231,200,122,.35)'; ctx.lineWidth=2; ctx.strokeRect(16,16,W-32,H-32);
 }
 
-function draw() {
-  const name = (current ? current.name : nameEl.value.trim()) || 'Исм Фамилия';
-  const phone = current ? current.phone : '+998' + digits(phoneEl.value);
-  const id = current ? current.ticketId : 'BX-2026-····';
-  const pad = 80;
+/* ── Билет ── */
+function draw(){
+  const t = current || {
+    name: nameIn.value.trim() || 'Исм Фамилия',
+    phone: '+998' + digits(phoneIn.value),
+    ticketId: 'BX-2026-····'
+  };
+  const d = digits(t.phone);
+  const ph = d.length===9 ? prettyPhone(d) : '+998 ·· ··· ·· ··';
+  const name = String(t.name).toUpperCase();
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
 
-  // фон
-  ctx.fillStyle = '#1D3F7A'; ctx.fillRect(0, 0, W, H);
-  pattern(0, 250);
-  const g = ctx.createLinearGradient(0, 120, 0, 250);
-  g.addColorStop(0, 'rgba(29,63,122,0)'); g.addColorStop(1, '#1D3F7A');
-  ctx.fillStyle = g; ctx.fillRect(0, 120, W, 130);
+  if (format === 'portrait'){
+    const W = canvas.width = 900, H = canvas.height = 1100;
+    bg(W,H,true);
+    ctx.fillStyle='#C9A227'; ctx.font='600 22px '+SANS;
+    ctx.fillText('БЕПУЛ БИЛЕТ · ИШТИРОКЧИ', 64, 108);
+    ctx.fillStyle='#F5F1E8'; ctx.font='600 66px '+SERIF;
+    ctx.fillText(CONFIG.TITLE, 64, 200);
+    ctx.fillStyle='#E7C87A'; ctx.font='600 44px '+SERIF;
+    ctx.fillText(CONFIG.SPEAKER+' билан', 64, 260);
+    ctx.strokeStyle='rgba(231,200,122,.3)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(64,312); ctx.lineTo(W-64,312); ctx.stroke();
 
-  // сарлавҳа
-  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
-  ctx.fillStyle = '#C9A06B';
-  ctx.font = '600 34px "Golos Text", system-ui, sans-serif';
-  ctx.fillText(CONFIG.TITLE, pad, 320);
-  ctx.fillStyle = '#FFFFFF';
-  ctx.font = '700 52px "Unbounded", system-ui, sans-serif';
-  ctx.fillText(CONFIG.SPEAKER, pad, 390);
+    lab(64,420,'ИШТИРОКЧИ',20);
+    const nm = nameLines(name, W-128, 44);
+    ctx.fillStyle='#F5F1E8'; ctx.font='700 '+nm.size+'px '+SANS;
+    nm.lines.forEach((ln,i)=> ctx.fillText(ln, 64, 476 + i*56));
+    const y2 = 476 + (nm.lines.length-1)*56;
 
-  // иштирокчи
-  ctx.fillStyle = 'rgba(255,255,255,.6)';
-  ctx.font = '500 30px "Golos Text", system-ui, sans-serif';
-  ctx.fillText('Иштирокчи', pad, 520);
-  ctx.fillStyle = '#FFFFFF';
-  const maxW = W - pad*2;
-  let size = 84;
-  ctx.font = `700 ${size}px "Unbounded", system-ui, sans-serif`;
-  let lines = wrapName(name, maxW);
-  size = Math.min(...lines.map(l => fitText(l, maxW, 84, 40, 700, '"Unbounded", system-ui, sans-serif')));
-  ctx.font = `700 ${size}px "Unbounded", system-ui, sans-serif`;
-  lines.forEach((l, i) => ctx.fillText(l, pad, 610 + i * size * 1.18));
+    lab(64,y2+86,'ТЕЛЕФОН',20);  val(64,y2+134,ph,32,W-128);
+    lab(64,y2+208,'САНА',20);    val(64,y2+256,CONFIG.DATE,30,380);
+    lab(480,y2+208,'ВАҚТ',20);   val(480,y2+256,CONFIG.TIME,30,340);
+    lab(64,y2+330,'ЖОЙ',20);     val(64,y2+378,CONFIG.PLACE,30,W-128);
 
-  // маълумот
-  const infoY = 860;
-  const cols = [['Сана', CONFIG.DATE], ['Вақт', CONFIG.TIME], ['Жой', CONFIG.PLACE]];
-  const colW = maxW / 3;
-  cols.forEach(([k, v], i) => {
-    const x = pad + i * colW;
-    ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = '500 28px "Golos Text", system-ui, sans-serif';
-    ctx.fillText(k, x, infoY);
-    ctx.fillStyle = '#FFFFFF';
-    fitText(v, colW - 24, 36, 22, 600, '"Golos Text", system-ui, sans-serif');
-    ctx.fillText(v, x, infoY + 48);
-  });
+    ctx.strokeStyle='rgba(231,200,122,.25)';
+    ctx.beginPath(); ctx.moveTo(64,H-150); ctx.lineTo(W-64,H-150); ctx.stroke();
+    ctx.fillStyle='#8B8477'; ctx.font='600 18px '+SANS;
+    ctx.fillText('БИЛЕТ РАҚАМИ', 64, H-98);
+    ctx.fillStyle='#E7C87A'; ctx.font='700 40px '+SANS;
+    ctx.fillText(t.ticketId, 64, H-50);
+    ctx.textAlign='right'; ctx.fillStyle='#8B8477'; ctx.font='600 18px '+SANS;
+    ctx.fillText('Real Business Academy', W-64, H-56); ctx.textAlign='left';
+  } else {
+    const W = canvas.width = 1200, H = canvas.height = 670;
+    bg(W,H,false);
+    const stub = W-330;
+    ctx.fillStyle='#C9A227'; ctx.font='600 18px '+SANS;
+    ctx.fillText('БЕПУЛ БИЛЕТ · ИШТИРОКЧИ', 62, 92);
+    ctx.fillStyle='#F5F1E8'; ctx.font='600 52px '+SERIF;
+    ctx.fillText(CONFIG.TITLE, 62, 152);
+    ctx.fillStyle='#E7C87A'; ctx.font='600 32px '+SERIF;
+    ctx.fillText(CONFIG.SPEAKER+' билан', 62, 196);
+    ctx.strokeStyle='rgba(231,200,122,.25)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(62,232); ctx.lineTo(stub-60,232); ctx.stroke();
 
-  // йиртиладиган чизиқ
-  const cutY = 1010;
-  ctx.fillStyle = '#F5F7FA';
-  ctx.beginPath(); ctx.arc(0, cutY, 34, 0, Math.PI*2); ctx.arc(W, cutY, 34, 0, Math.PI*2); ctx.fill();
-  ctx.save(); ctx.setLineDash([14, 14]); ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 3;
-  ctx.beginPath(); ctx.moveTo(60, cutY); ctx.lineTo(W - 60, cutY); ctx.stroke(); ctx.restore();
+    lab(62,290,'ИШТИРОКЧИ');
+    const nm = nameLines(name, stub-120, 36);
+    ctx.fillStyle='#F5F1E8'; ctx.font='700 '+nm.size+'px '+SANS;
+    nm.lines.forEach((ln,i)=> ctx.fillText(ln, 62, 336 + i*46));
+    const y2 = 336 + (nm.lines.length-1)*46;
 
-  // корешок
-  ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.font = '500 28px "Golos Text", system-ui, sans-serif';
-  ctx.fillText('Билет рақами', pad, 1110);
-  ctx.fillStyle = '#C9A06B'; ctx.font = '700 76px "Unbounded", system-ui, sans-serif';
-  ctx.fillText(id, pad, 1205);
-  ctx.fillStyle = 'rgba(255,255,255,.75)'; ctx.font = '500 30px "Golos Text", system-ui, sans-serif';
-  ctx.fillText(masked(phone), pad, 1265);
-  ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.font = '500 26px "Golos Text", system-ui, sans-serif';
-  ctx.fillText(CONFIG.BRAND, W - pad, 1265);
-  ctx.textAlign = 'left';
+    lab(62,y2+62,'ТЕЛЕФОН');  val(62,y2+102,ph,26,340);
+    lab(440,y2+62,'ВАҚТ');    val(440,y2+102,CONFIG.TIME,26,300);
+    lab(62,y2+158,'САНА');    val(62,y2+198,CONFIG.DATE,26,340);
+    lab(440,y2+158,'ЖОЙ');    val(440,y2+198,CONFIG.PLACE,26,340);
+
+    ctx.fillStyle='#8B8477'; ctx.font='600 15px '+SANS;
+    ctx.fillText('БИЛЕТ РАҚАМИ', 62, H-78);
+    ctx.fillStyle='#E7C87A'; ctx.font='700 30px '+SANS;
+    ctx.fillText(t.ticketId, 62, H-40);
+  }
+  canvas.className = format;
 }
 
-/* ---------- ҳолат ---------- */
-function setStatus(text, kind) { statusEl.textContent = text; statusEl.className = 'status ' + (kind || ''); }
-function fileName() { return (current ? current.ticketId : 'bilet') + '.png'; }
-function toBlob() { return new Promise(r => canvas.toBlob(r, 'image/png')); }
+/* ── Шакл танлаш ── */
+document.querySelectorAll('.seg button').forEach(b => {
+  b.setAttribute('aria-pressed', String(b.dataset.f === format));
+  b.onclick = () => {
+    format = b.dataset.f;
+    try { localStorage.setItem('bx-format', format); } catch(e){}
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    draw();
+  };
+});
 
-/* ---------- журнал (фақат шу қурилмада) ---------- */
-const LOG_KEY = 'bx-tickets';
-function readLog() { try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch { return []; } }
-function writeLog(list) { try { localStorage.setItem(LOG_KEY, JSON.stringify(list.slice(0, 200))); } catch {} }
-function addLog(t) {
-  const list = readLog().filter(x => x.ticketId !== t.ticketId);
-  list.unshift({ ticketId: t.ticketId, name: t.name, phone: t.phone });
-  writeLog(list); renderLog();
+/* ── Хабар ── */
+const show = (t,c) => { msg.textContent = t; msg.className = 'msg show '+c; };
+
+/* ── Охирги билетлар (фақат шу қурилмада) ── */
+const KEY = 'bx-tickets';
+const readLog = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ return []; } };
+const writeLog = l => { try { localStorage.setItem(KEY, JSON.stringify(l.slice(0,300))); } catch(e){} };
+function addLog(t){
+  const l = readLog().filter(x => x.ticketId !== t.ticketId);
+  l.unshift({ticketId:t.ticketId, name:t.name, phone:t.phone});
+  writeLog(l); renderLog();
 }
-function renderLog() {
-  const list = readLog(), ol = $('log');
-  $('count').textContent = list.length;
+function renderLog(){
+  const l = readLog(), ol = $('recent');
+  $('count').textContent = l.length;
   ol.innerHTML = '';
-  if (!list.length) { ol.innerHTML = '<li class="empty">Ҳали билет яратилмади.</li>'; return; }
-  list.slice(0, 12).forEach(t => {
+  if (!l.length){ ol.innerHTML = '<li class="empty">Ҳали билет яратилмади.</li>'; return; }
+  l.slice(0,10).forEach(t => {
     const li = document.createElement('li'), b = document.createElement('button');
     b.type = 'button';
     const n = document.createElement('span'); n.textContent = t.name;
     const i = document.createElement('span'); i.className = 'id'; i.textContent = t.ticketId;
-    b.append(n, i);
-    b.onclick = () => { current = t; draw(); actions.classList.add('show'); setStatus('Билет қайта очилди: ' + t.ticketId, 'ok'); };
+    b.append(n,i);
+    b.onclick = () => { current = t; draw(); actions.classList.add('show'); show('Билет қайта очилди: '+t.ticketId, 'ok'); };
     li.append(b); ol.append(li);
   });
 }
 
-/* ---------- юбориш ---------- */
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const name = nameEl.value.trim().replace(/\s+/g, ' ');
-  const d = digits(phoneEl.value);
-  if (name.split(' ').length < 2) { setStatus('Исм ва фамилияни тўлиқ ёзинг.', 'err'); nameEl.focus(); return; }
-  if (d.length !== 9) { setStatus('Телефон рақам 9 та рақамдан иборат бўлиши керак.', 'err'); phoneEl.focus(); return; }
-  if (!/^https:\/\/script\.google\.com\//.test(CONFIG.SCRIPT_URL)) {
-    setStatus('Apps Script манзили қўйилмаган: index.html ичидаги SCRIPT_URL ни тўлдиринг.', 'err'); return;
-  }
+/* ── Сервер ── */
+async function apiRegister(p){
+  const res = await fetch(CONFIG.SCRIPT_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(p)
+  });
+  if (!res.ok) throw new Error('жадвал жавоб бермади');
+  const d = await res.json();
+  if (d.status === 'error') throw new Error(d.message || 'номаълум хато');
+  return d;
+}
 
-  submitBtn.disabled = true; submitBtn.textContent = 'Яратилмоқда…'; setStatus('');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = nameIn.value.trim().replace(/\s+/g,' ');
+  const phone = normPhone(phoneIn.value);
+  if (!/^[^\s]{2,}\s+[^\s]{2,}/.test(name)) { nameIn.focus(); return show('Исм ва фамилияни тўлиқ ёзинг. Намуна: Азиз Каримов','err'); }
+  if (!phone) { phoneIn.focus(); return show('Телефон рақам тўлиқ эмас. Намуна: +998 90 123 45 67','err'); }
+
+  submitBtn.disabled = true; submitBtn.textContent = 'Яратилмоқда…'; msg.className = 'msg';
   try {
-    const res = await fetch(CONFIG.SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // CORS preflight бўлмаслиги учун
-      body: JSON.stringify({ name, phone: '+998' + d, region: CONFIG.REGION })
-    });
-    const data = await res.json();
-    if (data.status === 'created' || data.status === 'exists') {
-      current = { ticketId: data.ticketId, name: data.name, phone: data.phone };
-      draw(); addLog(current);
-      actions.classList.add('show');
-      setStatus(data.status === 'created'
-        ? 'Билет яратилди ва жадвалга ёзилди: ' + data.ticketId
-        : 'Бу рақамда билет бор эди — ўша билет очилди: ' + data.ticketId,
-        data.status === 'created' ? 'ok' : 'warn');
-    } else {
-      setStatus('Жадвал хато қайтарди: ' + (data.message || 'номаълум хато'), 'err');
-    }
-  } catch (err) {
-    setStatus('Жадвалга уланиб бўлмади. Интернетни ва SCRIPT_URL ни текширинг.', 'err');
+    const r = await apiRegister({name, phone, region: CONFIG.REGION});
+    current = {ticketId:r.ticketId, name:r.name, phone:r.phone};
+    draw(); addLog(current); actions.classList.add('show');
+    if (r.status === 'exists') show('Бу рақамга билет аввал берилган — ўша билет очилди: '+r.ticketId, 'warn');
+    else show('Билет яратилди ва жадвалга ёзилди: '+r.ticketId, 'ok');
+  } catch(err) {
+    show('Юборишда хатолик: '+err.message+'. Интернетни текширинг.', 'err');
   } finally {
     submitBtn.disabled = false; submitBtn.textContent = 'Билет яратиш';
   }
 });
 
-$('download').onclick = async () => {
-  const blob = await toBlob(), a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = fileName();
-  document.body.append(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+/* ── Юклаб олиш / улашиш ── */
+const fileName = () => 'bilet-'+(current ? current.ticketId : 'seminar')+'.png';
+function getBlob(){
+  return new Promise((ok, fail) => {
+    try { canvas.toBlob(b => b ? ok(b) : fail(), 'image/png'); } catch(e){ fail(e); }
+  });
+}
+const cantSave = () => show('Билетни сақлаш учун сайт ҳостингдан (Netlify) очилиши керак, файлдан эмас.', 'err');
+
+$('dlBtn').onclick = async () => {
+  try {
+    const b = await getBlob(), a = document.createElement('a');
+    a.href = URL.createObjectURL(b); a.download = fileName();
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  } catch(e){ cantSave(); }
 };
-$('share').onclick = async () => {
-  const blob = await toBlob();
-  const file = new File([blob], fileName(), { type: 'image/png' });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file], title: 'Билет ' + current.ticketId }); } catch {}
-  } else {
-    setStatus('Бу браузер улашишни қўлламайди — «Юклаб олиш» тугмасидан фойдаланинг.', 'warn');
-  }
+$('shareBtn').onclick = async () => {
+  let b; try { b = await getBlob(); } catch(e){ return cantSave(); }
+  const file = new File([b], fileName(), {type:'image/png'});
+  if (navigator.canShare && navigator.canShare({files:[file]})) {
+    try { await navigator.share({files:[file], title:'Билет '+current.ticketId}); } catch(e){}
+  } else show('Бу браузер улашишни қўлламайди — «Юклаб олиш» тугмасидан фойдаланинг.', 'warn');
 };
-$('next').onclick = () => {
-  current = null; form.reset(); actions.classList.remove('show'); setStatus(''); draw(); nameEl.focus();
+$('nextBtn').onclick = () => {
+  current = null; form.reset(); actions.classList.remove('show'); msg.className = 'msg';
+  draw(); nameIn.focus();
 };
 
-/* ---------- бошлаш ---------- */
-renderLog();
-draw();
-Promise.all([
-  document.fonts.load('700 40px "Unbounded", system-ui, sans-serif'),
-  document.fonts.load('500 30px "Golos Text", system-ui, sans-serif'),
-  document.fonts.load('600 30px "Golos Text", system-ui, sans-serif')
-]).then(draw, draw);
-document.fonts.ready.then(draw);
+/* ── Бошлаш ── */
+renderLog(); draw();
+if (document.fonts){
+  document.fonts.ready.then(draw);
+  Promise.all([
+    document.fonts.load('600 40px "Cormorant Garamond"'),
+    document.fonts.load('700 40px Manrope'),
+    document.fonts.load('600 20px Manrope')
+  ]).then(draw, draw);
+}
 </script>
 </body>
 </html>
