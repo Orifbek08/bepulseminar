@@ -69,6 +69,14 @@ main{padding:56px 0 72px}
 .field input{width:100%;padding:13px 0;background:transparent;border:0;border-bottom:1px solid var(--line);color:#fff;font:400 18px 'Manrope',sans-serif}
 .field input:focus{outline:0;border-bottom-color:var(--gold)}
 .field input::placeholder{color:#5D574E}
+.field select{width:100%;padding:13px 28px 13px 0;background:transparent;border:0;border-bottom:1px solid var(--line);color:#fff;
+  font:400 18px 'Manrope',sans-serif;cursor:pointer;appearance:none;-webkit-appearance:none;border-radius:0;
+  background-image:linear-gradient(45deg,transparent 50%,#C9A227 50%),linear-gradient(135deg,#C9A227 50%,transparent 50%);
+  background-position:calc(100% - 12px) 50%,calc(100% - 6px) 50%;background-size:6px 6px;background-repeat:no-repeat}
+.field select:focus{outline:0;border-bottom-color:var(--gold)}
+.field select:invalid{color:#5D574E}
+.field select option{background:#12100C;color:#fff}
+#fbizOther{margin-top:6px}
 .hint{font-size:12.5px;color:var(--muted);margin-top:8px}
 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 24px;border:0;border-radius:2px;cursor:pointer;
@@ -127,7 +135,7 @@ footer{border-top:1px solid rgba(255,255,255,.06);padding:32px 0;color:var(--mut
   .banner .wrap{top:auto;align-items:flex-end;justify-content:flex-start;padding-bottom:8px}
   main{padding:28px 0 56px}
   .form{padding:24px 20px}
-  .field input{font-size:17px}
+  .field input,.field select{font-size:17px}
   #ticket.portrait{max-width:none}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -167,6 +175,26 @@ footer{border-top:1px solid rgba(255,255,255,.06);padding:32px 0;color:var(--mut
           <input id="fphone" type="tel" inputmode="tel" placeholder="+998 90 123 45 67" autocomplete="off" required>
           <div class="hint">Битта рақамга битта билет. Рақам аввал ёзилган бўлса, ўша билет очилади.</div>
         </div>
+        <div class="field">
+          <label for="fbiz">Бизнес тури</label>
+          <select id="fbiz" required>
+            <option value="" disabled selected>Танланг</option>
+            <option>Савдо (дўкон, улгуржи)</option>
+            <option>Ишлаб чиқариш</option>
+            <option>Хизмат кўрсатиш</option>
+            <option>Умумий овқатланиш</option>
+            <option>Қурилиш ва таъмирлаш</option>
+            <option>Таълим</option>
+            <option>IT ва онлайн бизнес</option>
+            <option>Транспорт ва логистика</option>
+            <option>Қишлоқ хўжалиги</option>
+            <option>Тиббиёт ва гўзаллик</option>
+            <option>Бизнес бошлаяпман</option>
+            <option value="__other">Бошқа…</option>
+          </select>
+          <input id="fbizOther" type="text" placeholder="Бизнес турини ёзинг" autocomplete="off" hidden>
+          <div class="hint">Фақат жадвалга ёзилади, билетда чиқмайди.</div>
+        </div>
         <button class="btn btn-gold" id="submitBtn" type="submit">Билет яратиш</button>
         <div class="msg" id="msg" role="status" aria-live="polite"></div>
       </form>
@@ -191,7 +219,7 @@ footer{border-top:1px solid rgba(255,255,255,.06);padding:32px 0;color:var(--mut
           <button type="button" data-f="landscape" aria-pressed="false">Ётиқ</button>
         </div>
       </div>
-      <canvas id="ticket" class="portrait" width="900" height="1100"></canvas>
+      <canvas id="ticket" class="portrait" width="1080" height="1400"></canvas>
     </section>
   </div>
 </main>
@@ -220,8 +248,10 @@ try { format = localStorage.getItem('bx-format') || 'portrait'; } catch(e){}
 
 /* ── Телефон ── */
 function digits(raw){
-  let d = String(raw||'').replace(/\D/g,'');
-  if (d.startsWith('998')) d = d.slice(3);
+  const s = String(raw||'');
+  let d;
+  if (s.includes('+998')) d = s.replace('+998','').replace(/\D/g,'');   // кўрсатилган префиксни олиб ташлаймиз
+  else { d = s.replace(/\D/g,''); if (d.length > 9 && d.startsWith('998')) d = d.slice(3); }
   return d.slice(0,9);
 }
 function normPhone(raw){ const d = digits(raw); return d.length===9 ? '+998'+d : null; }
@@ -233,9 +263,28 @@ function prettyPhone(d){
   if (d.length>7) o += ' '+d.slice(7,9);
   return o;
 }
-phoneIn.addEventListener('input', e => { e.target.value = prettyPhone(digits(e.target.value)); if(!current) draw(); });
-phoneIn.addEventListener('focus', e => { if(!e.target.value) e.target.value = '+998 '; });
+const caretEnd = el => requestAnimationFrame(() => { const n = el.value.length; try { el.setSelectionRange(n, n); } catch(e){} });
+phoneIn.addEventListener('input', e => {
+  const d = digits(e.target.value);
+  e.target.value = d.length ? prettyPhone(d) : '+998 ';
+  caretEnd(e.target);
+  if(!current) draw();
+});
+phoneIn.addEventListener('focus', e => { if(!e.target.value) e.target.value = '+998 '; caretEnd(e.target); });
+phoneIn.addEventListener('blur', e => { if(!digits(e.target.value).length) e.target.value = ''; });
 nameIn.addEventListener('input', () => { if(!current) draw(); });
+
+/* ── Бизнес тури (фақат жадвалга) ── */
+const bizSel = $('fbiz'), bizOther = $('fbizOther');
+bizSel.addEventListener('change', () => {
+  const other = bizSel.value === '__other';
+  bizOther.hidden = !other;
+  if (other) bizOther.focus(); else bizOther.value = '';
+});
+function business(){
+  if (bizSel.value === '__other') return bizOther.value.trim().replace(/\s+/g,' ');
+  return bizSel.value;
+}
 
 /* ── Билет фонидаги расм ── */
 let tkPhoto = null;
@@ -279,11 +328,11 @@ function bg(W,H,portrait){
   ctx.fillStyle='#0A0908'; ctx.fillRect(0,0,W,H);
   if (tkPhoto){
     if (portrait){
-      const top = Math.round(H*.52);
+      const top = 720;                         // расм тепада, юз очиқ кўринади
       drawCover(tkPhoto, 0, 0, W, top, 'top');
       const g1 = ctx.createLinearGradient(0,0,0,top);
-      g1.addColorStop(0,'rgba(10,9,8,.30)'); g1.addColorStop(.45,'rgba(10,9,8,.55)');
-      g1.addColorStop(.80,'rgba(10,9,8,.88)'); g1.addColorStop(1,'#0A0908');
+      g1.addColorStop(0,'rgba(10,9,8,.25)'); g1.addColorStop(.55,'rgba(10,9,8,.05)');
+      g1.addColorStop(.78,'rgba(10,9,8,.55)'); g1.addColorStop(1,'#0A0908');
       ctx.fillStyle=g1; ctx.fillRect(0,0,W,top);
     } else {
       drawCover(tkPhoto, Math.round(W*.40), 0, Math.round(W*.60), H, 'top');
@@ -312,36 +361,38 @@ function draw(){
   ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
 
   if (format === 'portrait'){
-    const W = canvas.width = 900, H = canvas.height = 1100;
+    const W = canvas.width = 1080, H = canvas.height = 1400, X = 72;
     bg(W,H,true);
-    ctx.fillStyle='#C9A227'; ctx.font='600 22px '+SANS;
-    ctx.fillText('БЕПУЛ БИЛЕТ · ИШТИРОКЧИ', 64, 108);
-    ctx.fillStyle='#F5F1E8'; ctx.font='600 66px '+SERIF;
-    ctx.fillText(CONFIG.TITLE, 64, 200);
-    ctx.fillStyle='#E7C87A'; ctx.font='600 44px '+SERIF;
-    ctx.fillText(CONFIG.SPEAKER+' билан', 64, 260);
+    ctx.fillStyle='#C9A227'; ctx.font='600 24px '+SANS;
+    ctx.fillText('БЕПУЛ БИЛЕТ · ИШТИРОКЧИ', X, 96);
+
+    ctx.fillStyle='#F5F1E8'; ctx.font='600 76px '+SERIF;
+    ctx.fillText(CONFIG.TITLE, X, 700);
+    ctx.fillStyle='#E7C87A'; ctx.font='600 46px '+SERIF;
+    ctx.fillText(CONFIG.SPEAKER+' билан', X, 760);
     ctx.strokeStyle='rgba(231,200,122,.3)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(64,312); ctx.lineTo(W-64,312); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(X,806); ctx.lineTo(W-X,806); ctx.stroke();
 
-    lab(64,420,'ИШТИРОКЧИ',20);
-    const nm = nameLines(name, W-128, 44);
+    lab(X,868,'ИШТИРОКЧИ',22);
+    const nm = nameLines(name, W-X*2, 52);
     ctx.fillStyle='#F5F1E8'; ctx.font='700 '+nm.size+'px '+SANS;
-    nm.lines.forEach((ln,i)=> ctx.fillText(ln, 64, 476 + i*56));
-    const y2 = 476 + (nm.lines.length-1)*56;
+    nm.lines.forEach((ln,i)=> ctx.fillText(ln, X, 930 + i*64));
+    const y2 = 930 + (nm.lines.length-1)*64;
 
-    lab(64,y2+86,'ТЕЛЕФОН',20);  val(64,y2+134,ph,32,W-128);
-    lab(64,y2+208,'САНА',20);    val(64,y2+256,CONFIG.DATE,30,380);
-    lab(480,y2+208,'ВАҚТ',20);   val(480,y2+256,CONFIG.TIME,30,340);
-    lab(64,y2+330,'ЖОЙ',20);     val(64,y2+378,CONFIG.PLACE,30,W-128);
+    lab(X,y2+74,'ТЕЛЕФОН',22);  val(X,y2+120,ph,34,W-X*2);
+    const cw = (W-X*2)/3;
+    [['САНА',CONFIG.DATE],['ВАҚТ',CONFIG.TIME],['ЖОЙ',CONFIG.PLACE]].forEach(([k,v],i)=>{
+      lab(X+i*cw, y2+186, k, 22); val(X+i*cw, y2+230, v, 32, cw-24);
+    });
 
     ctx.strokeStyle='rgba(231,200,122,.25)';
-    ctx.beginPath(); ctx.moveTo(64,H-150); ctx.lineTo(W-64,H-150); ctx.stroke();
-    ctx.fillStyle='#8B8477'; ctx.font='600 18px '+SANS;
-    ctx.fillText('БИЛЕТ РАҚАМИ', 64, H-98);
-    ctx.fillStyle='#E7C87A'; ctx.font='700 40px '+SANS;
-    ctx.fillText(t.ticketId, 64, H-50);
-    ctx.textAlign='right'; ctx.fillStyle='#8B8477'; ctx.font='600 18px '+SANS;
-    ctx.fillText('Real Business Academy', W-64, H-56); ctx.textAlign='left';
+    ctx.beginPath(); ctx.moveTo(X,H-150); ctx.lineTo(W-X,H-150); ctx.stroke();
+    ctx.fillStyle='#8B8477'; ctx.font='600 20px '+SANS;
+    ctx.fillText('БИЛЕТ РАҚАМИ', X, H-100);
+    ctx.fillStyle='#E7C87A'; ctx.font='700 46px '+SANS;
+    ctx.fillText(t.ticketId, X, H-52);
+    ctx.textAlign='right'; ctx.fillStyle='#8B8477'; ctx.font='600 20px '+SANS;
+    ctx.fillText('Real Business Academy', W-X, H-58); ctx.textAlign='left';
   } else {
     const W = canvas.width = 1200, H = canvas.height = 670;
     bg(W,H,false);
@@ -432,10 +483,12 @@ form.addEventListener('submit', async e => {
   const phone = normPhone(phoneIn.value);
   if (!/^[^\s]{2,}\s+[^\s]{2,}/.test(name)) { nameIn.focus(); return show('Исм ва фамилияни тўлиқ ёзинг. Намуна: Азиз Каримов','err'); }
   if (!phone) { phoneIn.focus(); return show('Телефон рақам тўлиқ эмас. Намуна: +998 90 123 45 67','err'); }
+  const biz = business();
+  if (!biz) { (bizSel.value === '__other' ? bizOther : bizSel).focus(); return show('Бизнес турини танланг.','err'); }
 
   submitBtn.disabled = true; submitBtn.textContent = 'Яратилмоқда…'; msg.className = 'msg';
   try {
-    const r = await apiRegister({name, phone, region: CONFIG.REGION});
+    const r = await apiRegister({name, phone, business: biz, region: CONFIG.REGION});
     current = {ticketId:r.ticketId, name:r.name, phone:r.phone};
     draw(); addLog(current); actions.classList.add('show');
     if (r.status === 'exists') show('Бу рақамга билет аввал берилган — ўша билет очилди: '+r.ticketId, 'warn');
@@ -472,7 +525,7 @@ $('shareBtn').onclick = async () => {
   } else show('Бу браузер улашишни қўлламайди — «Юклаб олиш» тугмасидан фойдаланинг.', 'warn');
 };
 $('nextBtn').onclick = () => {
-  current = null; form.reset(); actions.classList.remove('show'); msg.className = 'msg';
+  current = null; form.reset(); bizOther.hidden = true; actions.classList.remove('show'); msg.className = 'msg';
   draw(); nameIn.focus();
 };
 

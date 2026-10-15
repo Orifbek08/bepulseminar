@@ -2,7 +2,7 @@
  * БУХОРО СЕМИНАРИ — БИЛЕТ ТИЗИМИ (Google Sheets backend)
  * Илҳом Бегимқулов · Бепул семинар · 2 ноябрь, 2026
  *
- * «Бухоро» листи: A: Сана | B: Исм фамилия | C: Телефон | D: ID рақам | E: Вилоят
+ * «Бухоро» листи: A: Сана | B: Исм фамилия | C: Телефон | D: ID рақам | E: Вилоят | F: Бизнес тури
  * Лист бўлмаса — ўзи яратилади. Бошқа листларга тегилмайди.
  * Битта телефон рақам — битта билет (фақат «Бухоро» листи ичида).
  */
@@ -11,6 +11,7 @@ var SHEET_NAME = 'Бухоро';
 var ID_PREFIX  = 'BX-2026-';
 var REGION     = 'Бухоро';
 var TZ         = 'Asia/Tashkent';
+var HEADERS    = ['Сана', 'Исм фамилия', 'Телефон', 'ID рақам', 'Вилоят', 'Бизнес тури'];
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -19,6 +20,7 @@ function doPost(e) {
     var data  = JSON.parse(e.postData.contents);
     var name  = String(data.name || '').trim().replace(/\s+/g, ' ');
     var phone = normPhone(data.phone);
+    var biz   = String(data.business || '').trim().replace(/\s+/g, ' ').substring(0, 120);
 
     if (!name || !phone) return json({ status: 'error', message: 'Исм ёки телефон хато' });
 
@@ -28,6 +30,8 @@ function doPost(e) {
     // 1) Телефон бор бўлса — эски билет қайтарилади
     for (var i = 1; i < values.length; i++) {
       if (normPhone(values[i][2]) === phone) {
+        // аввал бизнес тури ёзилмаган бўлса — тўлдириб қўямиз
+        if (biz && !String(values[i][5] || '').trim()) sheet.getRange(i + 1, 6).setValue(biz);
         return json(row(values[i], 'exists'));
       }
     }
@@ -35,7 +39,7 @@ function doPost(e) {
     // 2) Янги билет: кейинги тартиб рақами (сарлавҳа ҳисобга олинмайди)
     var ticketId = ID_PREFIX + padLeft(nextNumber(values), 4);
     var date = Utilities.formatDate(new Date(), TZ, 'dd.MM.yyyy HH:mm');
-    sheet.appendRow([date, name, phone, ticketId, REGION]);
+    sheet.appendRow([date, name, phone, ticketId, REGION, biz]);
     sheet.getRange(sheet.getLastRow(), 3).setNumberFormat('@'); // телефон матн бўлиб қолсин
 
     return json({ status: 'created', ticketId: ticketId, name: name, phone: phone, region: REGION, date: date });
@@ -69,10 +73,13 @@ function getSheet() {
   var sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    sheet.appendRow(['Сана', 'Исм фамилия', 'Телефон', 'ID рақам', 'Вилоят']);
-    sheet.getRange('A1:E1').setFontWeight('bold');
+    sheet.appendRow(HEADERS);
+    sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
     sheet.setFrozenRows(1);
     sheet.getRange('C:C').setNumberFormat('@');
+  } else if (String(sheet.getRange(1, 6).getValue()).trim() === '') {
+    // эски «Бухоро» листига «Бизнес тури» сарлавҳасини қўшиш
+    sheet.getRange(1, 6).setValue(HEADERS[5]).setFontWeight('bold');
   }
   return sheet;
 }
